@@ -2,24 +2,80 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 1. Buat Category Fiksi
+        $fiksi = Category::create([
+            'name' => 'Fiksi',
+            'description' => 'Buku yang berisi cerita atau karya imajinatif.',
+        ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // 2. Buat Category Non-Fiksi
+        $nonFiksi = Category::create([
+            'name' => 'Non-Fiksi',
+            'description' => 'Buku yang berisi informasi, pengetahuan, atau fakta.',
+        ]);
+
+        // 3. Buat Category Pendidikan
+        Category::create([
+            'name' => 'Pendidikan',
+            'description' => 'Buku yang berkaitan dengan pembelajaran dan pendidikan.',
+        ]);
+
+        // 4. Buat Book kategori Fiksi
+        Book::create([
+            'category_id' => $fiksi->id,
+            'title' => 'Laskar Pelangi',
+            'author' => 'Andrea Hirata',
+            'publisher' => 'Bentang Pustaka',
+            'year' => 2005,
+            'stock' => 10,
+        ]);
+
+        Book::create([
+            'category_id' => $fiksi->id,
+            'title' => 'Bumi Manusia',
+            'author' => 'Pramoedya Ananta Toer',
+            'publisher' => 'Hasta Mitra',
+            'year' => 1980,
+            'stock' => 7,
+        ]);
+
+        // 5. Buat Book kategori Non-Fiksi
+        Book::create([
+            'category_id' => $nonFiksi->id,
+            'title' => 'Filosofi Teras',
+            'author' => 'Henry Manampiring',
+            'publisher' => 'Buku Kompas',
+            'year' => 2018,
+            'stock' => 15,
+        ]);
+
+        Book::create([
+            'category_id' => $nonFiksi->id,
+            'title' => 'Atomic Habits (Edisi Indonesia)',
+            'author' => 'James Clear',
+            'publisher' => 'Gramedia Pustaka Utama',
+            'year' => 2019,
+            'stock' => 12,
+        ]);
+
+        Book::create([
+            'category_id' => $nonFiksi->id,
+            'title' => 'Sebuah Seni untuk Bersikap Bodo Amat',
+            'author' => 'Mark Manson',
+            'publisher' => 'Grasindo',
+            'year' => 2018,
+            'stock' => 8,
         ]);
     }
 }
