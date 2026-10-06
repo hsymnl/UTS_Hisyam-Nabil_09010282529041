@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -77,5 +79,17 @@ class DatabaseSeeder extends Seeder
             'year' => 2018,
             'stock' => 8,
         ]);
+
+        // 6. Akun Demo Authentication 
+        $demoPassword = env('DEMO_USER_PASSWORD');
+        if (!empty($demoPassword)) {
+            User::updateOrCreate(
+                ['email' => 'hisyamnabil@gmail.com'],
+                [
+                    'name' => 'Hisyam Nabil',
+                    'password' => Hash::make($demoPassword),
+                ]
+            );
+        }
     }
 }
