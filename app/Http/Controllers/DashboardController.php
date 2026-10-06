@@ -11,7 +11,8 @@ class DashboardController extends Controller
     {
         $totalBooks = Book::count();
         $totalCategories = Category::count();
+        $recentBooks = Book::with('category')->latest()->take(5)->get();
 
-        return view('dashboard', compact('totalBooks', 'totalCategories'));
+        return view('dashboard', compact('totalBooks', 'totalCategories', 'recentBooks'));
     }
 }

@@ -11,11 +11,22 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::with('category')->get();
+        $query = Book::with('category');
 
-        return view('books.index', compact('books'));
+        $search = $request->query('search');
+        if ($search !== null && trim($search) !== '') {
+            $searchTerm = trim($search);
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('title', 'like', "%{$searchTerm}%")
+                  ->orWhere('author', 'like', "%{$searchTerm}%");
+            });
+        }
+
+        $books = $query->get();
+
+        return view('books.index', compact('books', 'search'));
     }
 
     /**

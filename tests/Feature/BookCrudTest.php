@@ -30,6 +30,23 @@ class BookCrudTest extends TestCase
         );
     }
 
+    public function test_login_page_renders_successfully(): void
+    {
+        $response = $this->get('/login');
+        $response->assertStatus(200);
+        $response->assertSee('Selamat datang kembali');
+        $response->assertSee('Masuk');
+    }
+
+    public function test_user_cannot_login_with_invalid_credentials(): void
+    {
+        $response = $this->post('/login', [
+            'email' => 'wrong@email.com',
+            'password' => 'wrongpassword',
+        ]);
+        $response->assertSessionHasErrors('email');
+    }
+
     public function test_guest_cannot_access_dashboard(): void
     {
         $response = $this->get('/dashboard');
@@ -50,8 +67,27 @@ class BookCrudTest extends TestCase
         $response->assertSee('Ringkasan data perpustakaan.');
         $response->assertSee('Total Buku');
         $response->assertSee('Total Kategori');
+        $response->assertSee('Koleksi Terbaru');
+        $response->assertSee('Lihat semua');
         $response->assertSee('Lihat Buku');
         $response->assertSee('+ Tambah Buku');
+    }
+
+    public function test_dashboard_displays_recent_books_collection(): void
+    {
+        Book::create([
+            'title' => 'Buku Dashboard Terbaru',
+            'author' => 'Penulis Dashboard',
+            'publisher' => 'Penerbit Dashboard',
+            'year' => 2024,
+            'stock' => 10,
+            'category_id' => $this->category->id,
+        ]);
+
+        $response = $this->actingAs($this->user)->get('/dashboard');
+        $response->assertStatus(200);
+        $response->assertSee('Buku Dashboard Terbaru');
+        $response->assertSee('Penulis Dashboard');
     }
 
     public function test_authenticated_user_can_view_books_index(): void
@@ -218,5 +254,65 @@ class BookCrudTest extends TestCase
         $response = $this->actingAs($this->user)->post('/logout');
         $response->assertRedirect('/login');
         $this->assertGuest();
+    }
+
+    public function test_authenticated_user_can_search_books_by_title(): void
+    {
+        Book::create([
+            'title' => 'Algoritma Pemrograman C++',
+            'author' => 'Budi Santoso',
+            'publisher' => 'Informatika',
+            'year' => 2021,
+            'stock' => 5,
+            'category_id' => $this->category->id,
+        ]);
+
+        Book::create([
+            'title' => 'Sistem Basis Data',
+            'author' => 'Fathansyah',
+            'publisher' => 'Informatika',
+            'year' => 2020,
+            'stock' => 4,
+            'category_id' => $this->category->id,
+        ]);
+
+        $response = $this->actingAs($this->user)->get('/books?search=Algoritma');
+        $response->assertStatus(200);
+        $response->assertSee('Algoritma Pemrograman C++');
+        $response->assertDontSee('Sistem Basis Data');
+    }
+
+    public function test_authenticated_user_can_search_books_by_author(): void
+    {
+        Book::create([
+            'title' => 'Belajar Jaringan Komputer',
+            'author' => 'Iwan Sofana',
+            'publisher' => 'Informatika',
+            'year' => 2022,
+            'stock' => 7,
+            'category_id' => $this->category->id,
+        ]);
+
+        Book::create([
+            'title' => 'Rekayasa Perangkat Lunak',
+            'author' => 'Rosa A.S',
+            'publisher' => 'Informatika',
+            'year' => 2019,
+            'stock' => 6,
+            'category_id' => $this->category->id,
+        ]);
+
+        $response = $this->actingAs($this->user)->get('/books?search=Sofana');
+        $response->assertStatus(200);
+        $response->assertSee('Belajar Jaringan Komputer');
+        $response->assertDontSee('Rekayasa Perangkat Lunak');
+    }
+
+    public function test_search_shows_empty_message_when_no_match(): void
+    {
+        $response = $this->actingAs($this->user)->get('/books?search=NonExistentBookXYZ123');
+        $response->assertStatus(200);
+        $response->assertSee('Buku tidak ditemukan.');
+        $response->assertSee('Coba gunakan kata pencarian yang berbeda.');
     }
 }

@@ -37,13 +37,14 @@
             align-items: center;
             justify-content: center;
             padding: 24px 16px;
+            -webkit-font-smoothing: antialiased;
         }
 
         .login-card {
             background-color: var(--color-surface);
             border: 1px solid var(--color-border);
             border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
             width: 100%;
             max-width: 880px;
             display: grid;
@@ -51,7 +52,7 @@
             overflow: hidden;
         }
 
-        /* Left Info Panel */
+        /* Left Info Panel (Editorial & Tenang) */
         .info-panel {
             background-color: #FAFAFC;
             border-right: 1px solid var(--color-border);
@@ -72,8 +73,8 @@
         }
 
         .brand-icon {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             color: var(--color-primary);
         }
 
@@ -87,6 +88,7 @@
             line-height: 1.3;
             color: var(--color-text);
             margin-bottom: 12px;
+            letter-spacing: -0.01em;
         }
 
         .info-text {
@@ -121,6 +123,7 @@
             color: var(--color-text);
             line-height: 1.25;
             margin-bottom: 6px;
+            letter-spacing: -0.01em;
         }
 
         .form-subheading {
@@ -150,6 +153,7 @@
             font-weight: 600;
             color: var(--color-text);
             margin-bottom: 8px;
+            line-height: 1.4;
         }
 
         .form-input {
@@ -162,7 +166,8 @@
             font-size: 14px;
             color: var(--color-text);
             outline: none;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+            transition: border-color 150ms ease, box-shadow 150ms ease;
+            font-family: inherit;
         }
 
         .form-input:focus {
@@ -189,14 +194,16 @@
             color: #FFFFFF;
             font-size: 14px;
             font-weight: 600;
-            border: none;
+            border: 1px solid var(--color-primary);
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.15s ease;
+            transition: background-color 150ms ease, border-color 150ms ease;
+            font-family: inherit;
         }
 
         .btn-submit:hover {
             background-color: var(--color-primary-hover);
+            border-color: var(--color-primary-hover);
         }
 
         .btn-submit:focus-visible {
@@ -204,7 +211,7 @@
             outline-offset: 2px;
         }
 
-        /* Responsive */
+        /* Responsive Mobile Layout */
         @media (max-width: 768px) {
             .login-card {
                 grid-template-columns: 1fr;
@@ -237,7 +244,7 @@
 </head>
 <body>
     <div class="login-card">
-        <!-- Area Informasi -->
+        <!-- Area Informasi (Left Panel) -->
         <div class="info-panel">
             <div class="brand">
                 <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -249,7 +256,7 @@
             </div>
 
             <div class="info-body">
-                <h1 class="info-heading">Kelola data buku dengan mudah dan teratur.</h1>
+                <h1 class="info-heading">Kelola data buku dengan rapi dan mudah.</h1>
                 <p class="info-text">Sistem pengelolaan data buku perpustakaan untuk memantau koleksi, kategori, dan informasi buku secara terstruktur.</p>
                 <div class="info-divider"></div>
                 <p class="info-caption">Sistem pengelolaan data buku</p>
@@ -260,7 +267,7 @@
             </div>
         </div>
 
-        <!-- Area Form Login -->
+        <!-- Area Form Login (Right Panel) -->
         <div class="form-panel">
             <h2 class="form-heading">Selamat datang kembali</h2>
             <p class="form-subheading">Masuk untuk melanjutkan ke aplikasi.</p>
@@ -295,7 +302,7 @@
                         type="password"
                         id="password"
                         name="password"
-                        class="form-input @error('email') is-invalid @enderror"
+                        class="form-input @error('password') is-invalid @enderror"
                         placeholder="••••••••"
                         required
                         autocomplete="current-password"

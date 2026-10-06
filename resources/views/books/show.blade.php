@@ -23,20 +23,21 @@
         <div style="color: var(--color-text);">{{ $book->publisher }}</div>
 
         <div style="font-weight: 600; color: var(--color-text-secondary);">Tahun Terbit</div>
-        <div style="color: var(--color-text);">{{ $book->year }}</div>
+        <div style="color: var(--color-text); font-variant-numeric: tabular-nums;">{{ $book->year }}</div>
 
         <div style="font-weight: 600; color: var(--color-text-secondary);">Stok</div>
-        <div style="color: var(--color-text);">{{ $book->stock }}</div>
+        <div style="color: var(--color-text); font-variant-numeric: tabular-nums;">{{ $book->stock }}</div>
 
         <div style="font-weight: 600; color: var(--color-text-secondary);">Kategori</div>
         <div>
-            <span style="display: inline-block; padding: 2px 10px; border-radius: 4px; background-color: var(--color-page); border: 1px solid var(--color-border); font-size: 13px; color: var(--color-text-secondary);">
+            <span class="badge-category">
                 {{ $book->category->name ?? '-' }}
             </span>
         </div>
     </div>
 
-    <div style="display: flex; gap: 12px; align-items: center; border-top: 1px solid var(--color-border); padding-top: 24px;">
+    <!-- Actions -->
+    <div style="display: flex; gap: 12px; align-items: center; border-top: 1px solid var(--color-border); padding-top: 24px; flex-wrap: wrap;">
         <a href="{{ route('books.edit', $book) }}" class="btn btn-primary">
             Edit Buku
         </a>
