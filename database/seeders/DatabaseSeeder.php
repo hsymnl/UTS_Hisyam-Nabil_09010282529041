@@ -80,7 +80,7 @@ class DatabaseSeeder extends Seeder
             'stock' => 8,
         ]);
 
-        // 6. Akun Demo Authentication 
+        // 6. Akun Demo Authentication (hanya dibuat jika DEMO_USER_PASSWORD tersedia)
         $demoPassword = env('DEMO_USER_PASSWORD');
         if (!empty($demoPassword)) {
             User::updateOrCreate(
